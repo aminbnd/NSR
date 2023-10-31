@@ -1,0 +1,18 @@
+{
+  "name": "com.silvertau.nativescreenrecorder",
+  "version": "1.3.6",
+  "displayName": "Native Screen Recorder",
+  "description": "Native Screen Recorder\n\nNSR - Screen Recorder allows you to easily record the application screen on your device. The plugin provides an api for recording video on iOS, Android, Windows, macOS.",
+  "author": {
+      "name": "Silver Tau",
+      "url": "https://www.silvertau.com/"
+  },
+  "keywords": [
+    "Native Screen Recorder",
+    "Native",
+    "Screen",
+    "Recorder",
+    "Screen Recorder",
+    "Framework"
+  ]
+}

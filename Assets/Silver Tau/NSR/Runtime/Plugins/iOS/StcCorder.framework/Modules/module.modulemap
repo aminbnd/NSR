@@ -1,0 +1,6 @@
+framework module StcCorder {
+  umbrella header "StcCorder.h"
+
+  export *
+  module * { export * }
+}

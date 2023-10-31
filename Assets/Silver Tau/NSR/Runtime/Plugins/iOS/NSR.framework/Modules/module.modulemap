@@ -1,0 +1,11 @@
+framework module NSR {
+  umbrella header "NSR.h"
+  export *
+
+  module * { export * }
+}
+
+module NSR.Swift {
+  header "NSR-Swift.h"
+  requires objc
+}

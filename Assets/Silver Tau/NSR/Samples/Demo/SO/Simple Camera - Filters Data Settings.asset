@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 030a363c2ff1748c5862133e3c732bf1, type: 3}
+  m_Name: Simple Camera - Filters Data Settings
+  m_EditorClassIdentifier: 
+  filters:
+  - id: none
+    title: None
+    sprite: {fileID: 21300000, guid: ecd00ea57bd3e425198d1c9fcc04eb24, type: 3}
+    filterShader: {fileID: 4800000, guid: b2ebce0537a30e4479be43bf9356d883, type: 3}
+    additionalFilterShader: {fileID: 0}
+  - id: bw
+    title: BW
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: a00a99860e2a7e342a18c86a1165fda4, type: 3}
+    additionalFilterShader: {fileID: 0}
+  - id: sepia
+    title: Sepia
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: 12c4528c2e372b1438c0c28cb5bb1f62, type: 3}
+    additionalFilterShader: {fileID: 0}
+  - id: blur-full
+    title: Blur Full
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: ffdbe1a51bb49354ba9adb6a5fd9cacc, type: 3}
+    additionalFilterShader: {fileID: 0}
+  - id: blur-edge
+    title: Blur Edge
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: b35688d0c6175c440be3bb78b54359ba, type: 3}
+    additionalFilterShader: {fileID: 0}
+  - id: outlines
+    title: Outlines
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: 1b95ce79bcee5ed42b2f950cd7b7310b, type: 3}
+    additionalFilterShader: {fileID: 0}
+  - id: neon
+    title: Neon
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: c965c0188009658429bb161a8022cba3, type: 3}
+    additionalFilterShader: {fileID: 4800000, guid: 64ce0c6ff22e2254195a4d821e608722,
+      type: 3}
+  - id: nes
+    title: NES
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: ded0d890f52931c4eb400cf2ef9b1121, type: 3}
+    additionalFilterShader: {fileID: 4800000, guid: b489d3d7f669ca942ae6600b83f41d18,
+      type: 3}
+  - id: snes
+    title: SNES
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: 56e1ddf59ba52bc48a1b198e526c8ecb, type: 3}
+    additionalFilterShader: {fileID: 4800000, guid: b489d3d7f669ca942ae6600b83f41d18,
+      type: 3}
+  - id: game-boy
+    title: Game Boy
+    sprite: {fileID: 21300000, guid: 397f9920956054a5aadf7ad8952e6da4, type: 3}
+    filterShader: {fileID: 4800000, guid: 2db984693759f684f90c23d678c96605, type: 3}
+    additionalFilterShader: {fileID: 0}

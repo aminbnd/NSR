@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2323b253f881d4e1abe19e6d4dfeeeda, type: 3}
+  m_Name: Simple Camera - Audio Data Settings
+  m_EditorClassIdentifier: 
+  audioSources:
+  - id: 0
+    title: None
+    sprite: {fileID: 21300000, guid: ecd00ea57bd3e425198d1c9fcc04eb24, type: 3}
+    audioClip: {fileID: 0}
+  - id: 1
+    title: Track 01
+    sprite: {fileID: 21300000, guid: 3d6d73199156d4d0bb5d2ec3fbeb20e0, type: 3}
+    audioClip: {fileID: 8300000, guid: e8b0f87be4f8b443daa4dbca28064c62, type: 3}
+  - id: 2
+    title: Track 02
+    sprite: {fileID: 21300000, guid: 3d6d73199156d4d0bb5d2ec3fbeb20e0, type: 3}
+    audioClip: {fileID: 8300000, guid: 6243abf3164c543de9c056a0cf11cf17, type: 3}
+  - id: 3
+    title: Track 03
+    sprite: {fileID: 21300000, guid: 3d6d73199156d4d0bb5d2ec3fbeb20e0, type: 3}
+    audioClip: {fileID: 8300000, guid: d7d55585b75bc4c7eac330a485775fc7, type: 3}
+  - id: 4
+    title: Track 04
+    sprite: {fileID: 21300000, guid: 3d6d73199156d4d0bb5d2ec3fbeb20e0, type: 3}
+    audioClip: {fileID: 8300000, guid: bbedbe63baacb4849be96003c3d35ba5, type: 3}
