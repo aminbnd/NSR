@@ -155,18 +155,25 @@ namespace SilverTau.NSR.Recorders.Video
         {
             var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
             var fileName = UniversalVideoRecorder.Instance.videoFileName;
-#if UNITY_ANDROID && !UNITY_EDITOR
-                    Test();
 
-#else
-            // For other platforms (Windows, macOS, etc.), display a simple share prompt.
-            ShowSharePopup(fileName + " " + outputPath);
-#endif
+            // Check if the file exists
+            string filePath = Path.Combine(outputPath, fileName);
+            if (File.Exists(filePath))
+            {
+                // Copy the video to the external storage directory
+                string destinationPath = Path.Combine(Application.persistentDataPath, fileName);
+                File.Copy(filePath, destinationPath, true);
+
+                // Share the video from the external storage directory
+                NativeShare.ShareOnAndroid(destinationPath, "Share Video");
+            }
+            else
+            {
+                Debug.LogError("Video file does not exist: " + filePath);
+            }
         }
 
-        //// Android Native Share
-        ////[DllImport("JNIUnity")]
-        //NativeShare.ShareOnAndroid(title + " " + link, title);
+
 
 
         //Display a basic share prompt for other platforms
@@ -182,28 +189,6 @@ namespace SilverTau.NSR.Recorders.Video
             var fileName = UniversalVideoRecorder.Instance.videoFileName;
             NativeShare.ShareOnAndroid(outputPath, fileName);
         }
-
-        //private void Share()
-        //{
-        //    var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
-        //    var fileName = UniversalVideoRecorder.Instance.videoFileName;
-
-        //    // Check if the file exists
-        //    string filePath = Path.Combine(outputPath, fileName);
-        //    if (File.Exists(filePath))
-        //    {
-        //        // Copy the video to the external storage directory
-        //        string destinationPath = Path.Combine(Application.persistentDataPath, fileName);
-        //        File.Copy(filePath, destinationPath, true);
-
-        //        // Share the video from the external storage directory
-        //        NativeShare.ShareOnAndroid(destinationPath, "Share Video");
-        //    }
-        //    else
-        //    {
-        //        Debug.LogError("Video file does not exist: " + filePath);
-        //    }
-        //}
 
     }
 }
