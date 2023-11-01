@@ -156,15 +156,19 @@ namespace SilverTau.NSR.Recorders.Video
             var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
             var fileName = UniversalVideoRecorder.Instance.videoFileName;
 
-            // Check if the file exists
+            if (string.IsNullOrEmpty(outputPath) || string.IsNullOrEmpty(fileName))
+            {
+                Debug.LogError("outputPath or fileName is null or empty");
+                return;
+            }
+
             string filePath = Path.Combine(outputPath, fileName);
+
             if (File.Exists(filePath))
             {
-                // Copy the video to the external storage directory
                 string destinationPath = Path.Combine(Application.persistentDataPath, fileName);
                 File.Copy(filePath, destinationPath, true);
 
-                // Share the video from the external storage directory
                 NativeShare.ShareOnAndroid(destinationPath, "Share Video");
             }
             else
