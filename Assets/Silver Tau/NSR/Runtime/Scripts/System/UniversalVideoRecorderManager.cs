@@ -155,19 +155,14 @@ namespace SilverTau.NSR.Recorders.Video
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
     var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
-    var fileName = UniversalVideoRecorder.Instance.videoFileName;
 
-    if (string.IsNullOrEmpty(outputPath) || string.IsNullOrEmpty(fileName))
+    if (string.IsNullOrEmpty(outputPath))
     {
-        Debug.LogError("outputPath or fileName is null or empty");
+        Debug.LogError("outputPath is null or empty");
         return;
     }
 
-    // Ensure that outputPath is the correct file path, not a directory
-    if (!outputPath.EndsWith("/" + fileName))
-    {
-        outputPath = Path.Combine(outputPath, fileName);
-    }
+    string fileName = Path.GetFileName(outputPath); // Extract the file name from the path
 
     if (File.Exists(outputPath))
     {
