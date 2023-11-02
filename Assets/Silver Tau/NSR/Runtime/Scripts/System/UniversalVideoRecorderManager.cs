@@ -163,25 +163,32 @@ namespace SilverTau.NSR.Recorders.Video
         return;
     }
 
-    string filePath = Path.Combine(outputPath, fileName);
+    // Ensure that outputPath is the correct file path, not a directory
+    if (!outputPath.EndsWith("/" + fileName))
+    {
+        outputPath = Path.Combine(outputPath, fileName);
+    }
 
-    if (File.Exists(filePath))
+    if (File.Exists(outputPath))
     {
         // Create an Android intent for sharing
         AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent");
         AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent");
-        
+
         // Set the action to ACTION_SEND
         intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_SEND"));
-        
+
         // Set the type to video/*
         intentObject.Call<AndroidJavaObject>("setType", "video/*");
-        
+
         // Attach the video file
         AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
-        AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("fromFile", new AndroidJavaObject("java.io.File", filePath));
+        AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("fromFile", new AndroidJavaObject("java.io.File", outputPath));
         intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_STREAM"), uriObject);
-        
+
+        // Set the title of the sharing dialog
+        intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TITLE"), "Share Video");
+
         // Start the Android sharing activity
         AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
@@ -190,7 +197,7 @@ namespace SilverTau.NSR.Recorders.Video
     }
     else
     {
-        Debug.LogError("Video file does not exist: " + filePath);
+        Debug.LogError("Video file does not exist: " + outputPath);
     }
 #else
             Debug.LogWarning("Sharing is only supported on Android");
