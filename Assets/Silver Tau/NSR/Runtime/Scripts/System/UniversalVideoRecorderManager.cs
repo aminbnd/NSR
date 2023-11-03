@@ -153,54 +153,44 @@ namespace SilverTau.NSR.Recorders.Video
 
         private void Share()
         {
-#if UNITY_ANDROID && !UNITY_EDITOR
-    var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
+            var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
 
-    if (string.IsNullOrEmpty(outputPath))
-    {
-        Debug.LogError("outputPath is null or empty");
-        return;
-    }
+            if (string.IsNullOrEmpty(outputPath))
+            {
+                Debug.LogError("outputPath is null or empty");
+                return;
+            }
 
-    string fileName = Path.GetFileName(outputPath); // Extract the file name from the path
+            string fileName = Path.GetFileName(outputPath); // Extract the file name from the path
 
-    if (File.Exists(outputPath))
-    {
-        // Create an Android intent for sharing
-        AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent");
-        AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent");
+            if (File.Exists(outputPath))
+            {
+                try
+                {
+                    AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
+                    AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("fromFile", new AndroidJavaObject("java.io.File", outputPath));
 
-        // Set the action to ACTION_SEND
-        intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_SEND"));
+                    AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent");
+                    intent.Call<AndroidJavaObject>("setAction", "android.intent.action.SEND");
+                    intent.Call<AndroidJavaObject>("setType", "video/*");
+                    intent.Call<AndroidJavaObject>("putExtra", "android.intent.extra.STREAM", uriObject);
+                    intent.Call<AndroidJavaObject>("addFlags", 1); // FLAG_ACTIVITY_NEW_TASK
+                    intent.Call<AndroidJavaObject>("setPackage", "com.android.bluetooth"); // You can change the package name to other apps
 
-        // Set the type to video/*
-        intentObject.Call<AndroidJavaObject>("setType", "video/*");
-
-        // Attach the video file
-        AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
-        AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("fromFile", new AndroidJavaObject("java.io.File", outputPath));
-        intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_STREAM"), uriObject);
-
-        // Set the title of the sharing dialog
-        intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_TITLE"), "Share Video");
-
-        // Start the Android sharing activity
-        AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
-        AndroidJavaObject chooser = intentClass.CallStatic<AndroidJavaObject>("createChooser", intentObject, "Share Video");
-        currentActivity.Call("startActivity", chooser);
-    }
-    else
-    {
-        Debug.LogError("Video file does not exist: " + outputPath);
-    }
-#else
-            Debug.LogWarning("Sharing is only supported on Android");
-#endif
+                    AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                    AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+                    currentActivity.Call("startActivity", intent);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Error sharing the video: " + e);
+                }
+            }
+            else
+            {
+                Debug.LogError("Video file does not exist: " + outputPath);
+            }
         }
-
-
-
 
         //Display a basic share prompt for other platforms
         private void ShowSharePopup(string message)
@@ -215,6 +205,5 @@ namespace SilverTau.NSR.Recorders.Video
             var fileName = UniversalVideoRecorder.Instance.videoFileName;
             NativeShare.ShareOnAndroid(outputPath, fileName);
         }
-
     }
 }
