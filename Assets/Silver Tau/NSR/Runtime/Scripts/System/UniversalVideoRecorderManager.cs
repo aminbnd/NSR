@@ -153,43 +153,49 @@ namespace SilverTau.NSR.Recorders.Video
 
         private void Share()
         {
-            var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
+#if UNITY_ANDROID && !UNITY_EDITOR
+    var outputPath = UniversalVideoRecorder.Instance.VideoOutputPath;
 
-            if (string.IsNullOrEmpty(outputPath))
+    if (string.IsNullOrEmpty(outputPath))
+    {
+        Debug.LogError("outputPath is null or empty");
+        return;
+    }
+
+    if (File.Exists(outputPath))
+    {
+        using (AndroidJavaClass intentClass = new AndroidJavaClass("android.content.Intent"))
+        using (AndroidJavaObject intentObject = new AndroidJavaObject("android.content.Intent"))
+        {
+            // Set the action to ACTION_SEND
+            intentObject.Call<AndroidJavaObject>("setAction", intentClass.GetStatic<string>("ACTION_SEND"));
+
+            // Set the type to video/*
+            intentObject.Call<AndroidJavaObject>("setType", "video/*");
+
+            // Attach the video file to the intent
+            using (AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri"))
+            using (AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("parse", "file://" + outputPath))
             {
-                Debug.LogError("outputPath is null or empty");
-                return;
+                intentObject.Call<AndroidJavaObject>("putExtra", intentClass.GetStatic<string>("EXTRA_STREAM"), uriObject);
             }
 
-            string fileName = Path.GetFileName(outputPath); // Extract the file name from the path
-
-            if (File.Exists(outputPath))
+            // Start the Android sharing activity
+            using (AndroidJavaObject unity = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            using (AndroidJavaObject currentActivity = unity.GetStatic<AndroidJavaObject>("currentActivity"))
+            using (AndroidJavaObject chooser = intentClass.CallStatic<AndroidJavaObject>("createChooser", intentObject, "Share Video"))
             {
-                try
-                {
-                    AndroidJavaClass uriClass = new AndroidJavaClass("android.net.Uri");
-                    AndroidJavaObject uriObject = uriClass.CallStatic<AndroidJavaObject>("fromFile", new AndroidJavaObject("java.io.File", outputPath));
-
-                    AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent");
-                    intent.Call<AndroidJavaObject>("setAction", "android.intent.action.SEND");
-                    intent.Call<AndroidJavaObject>("setType", "video/*");
-                    intent.Call<AndroidJavaObject>("putExtra", "android.intent.extra.STREAM", uriObject);
-                    intent.Call<AndroidJavaObject>("addFlags", 1); // FLAG_ACTIVITY_NEW_TASK
-                    intent.Call<AndroidJavaObject>("setPackage", "com.android.bluetooth"); // You can change the package name to other apps
-
-                    AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-                    AndroidJavaObject currentActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-                    currentActivity.Call("startActivity", intent);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError("Error sharing the video: " + e);
-                }
+                currentActivity.Call("startActivity", chooser);
             }
-            else
-            {
-                Debug.LogError("Video file does not exist: " + outputPath);
-            }
+        }
+    }
+    else
+    {
+        Debug.LogError("Video file does not exist: " + outputPath);
+    }
+#else
+            Debug.LogWarning("Sharing is only supported on Android");
+#endif
         }
 
         //Display a basic share prompt for other platforms
